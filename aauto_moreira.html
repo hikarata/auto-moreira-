@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>auto moreira</title>
+    <style>
+        /* Estilos básicos */
+        body {
+            background-color: #0d0d0d;
+            color: #ffffff;
+            font-family: 'Consolas', 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Animação do Texto RGB */
+        .rgb-text {
+            font-size: 3em;
+            font-weight: bold;
+            text-transform: uppercase;
+            /* Aplica um gradiente de cor no texto */
+            background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+            /* O gradiente deve ser maior que o texto para o efeito de animação */
+            background-size: 400% 100%;
+            /* Recorta o fundo para aparecer apenas no texto */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            /* Inicia a animação */
+            animation: rgb-animation 8s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes rgb-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 400% 50%;
+            }
+        }
+
+        /* Estilos do Formulário */
+        .input-container {
+            width: 90%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        .input-container p {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        #linkInput {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 2px solid #9400d3;
+            background-color: #222;
+            color: #fff;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+
+        /* Estilos da Área de Mensagens e Progresso */
+        #statusMessage {
+            margin-top: 30px;
+            font-size: 1.2em;
+            min-height: 20px; /* Garante espaço para a mensagem */
+            color: #00ff00;
+        }
+
+        #progressContainer {
+            width: 90%;
+            max-width: 600px;
+            margin-top: 20px;
+            display: none; /* Escondido por padrão */
+        }
+
+        #progressBar {
+            width: 100%;
+            height: 25px;
+            background-color: #555;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        #progressFill {
+            height: 100%;
+            width: 0%;
+            background-color: #00aaff;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="rgb-text">auto método moreira</div>
+
+    <div class="input-container">
+        <p>coloque o link do seu servidor aqui</p>
+        <input type="text" id="linkInput" placeholder="Ex: https://meuservidor.com/link-do-metodo">
+    </div>
+
+    <div id="statusMessage"></div>
+
+    <div id="progressContainer">
+        <div id="progressBar">
+            <div id="progressFill">0%</div>
+        </div>
+    </div>
+
+    <script>
+        // Lógica em JavaScript
+        document.getElementById('linkInput').addEventListener('keydown', function(event) {
+            // Verifica se a tecla pressionada é 'Enter' (código 13)
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Impede a quebra de linha padrão do 'Enter'
+                iniciarMetodo();
+            }
+        });
+        
+        // Adiciona um listener para o evento blur (perda de foco)
+        document.getElementById('linkInput').addEventListener('blur', function() {
+             // Iniciar o método quando o campo perde o foco (como se fosse um "OK")
+             // Cuidado: isso pode ser muito sensível. Para evitar disparos acidentais,
+             // é melhor se limitar apenas ao 'Enter' ou a um botão.
+             // Para simplificar e cumprir o pedido:
+             // iniciarMetodo();
+        });
+
+        function iniciarMetodo() {
+            const inputElement = document.getElementById('linkInput');
+            const statusMessage = document.getElementById('statusMessage');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const link = inputElement.value.trim();
+            
+            // Verifica se o link foi digitado
+            if (link === "") {
+                statusMessage.textContent = "Por favor, insira o link do seu servidor.";
+                progressContainer.style.display = 'none';
+                return;
+            }
+
+            // 1. Mostrar a mensagem de "Iniciando método" e o link/escrita
+            statusMessage.textContent = `Iniciando método para: ${link}`;
+            
+            // 2. Mostrar a barra de progresso
+            progressContainer.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressFill.textContent = '0%';
+            
+            // 3. Simular o progresso de 1% a 99%
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 1;
+                progressFill.style.width = `${progress}%`;
+                progressFill.textContent = `${progress}%`;
+                
+                if (progress >= 99) {
+                    clearInterval(interval);
+                    
+                    // 4. Mostrar "Concluído"
+                    // Aguarda um pequeno momento para dar o efeito de conclusão
+                    setTimeout(() => {
+                        progressFill.style.width = '100%';
+                        progressFill.textContent = '100%';
+                        statusMessage.textContent = 'Concluído';
+                        
+                        // Opcional: Desabilitar o campo após a conclusão
+                        inputElement.disabled = true;
+                    }, 500);
+                }
+            }, 100); // Atualiza a cada 100 milissegundos (simulando 99 passos em 9.9 segundos)
+            
+            // Opcional: Desabilitar o campo durante o processamento
+            inputElement.disabled = false; // Mantenha desabilitado apenas no final se for o caso
+            inputElement.value = ''; // Limpar o campo após o início
+        }
+    </script>
+
+</body>
+</html>
+
